@@ -77,7 +77,7 @@ A design change mid-way → stop. Update the spec, or run `/ccs:spec` if there i
 Report each list item → test name or `manual`, then the actual suite output. For a bug,
 add the root cause in one line. What you skipped, one line each: `skipped: X, add when Y`.
 
-Do not commit. The user commits. Then write the report (below).
+Do not commit. The user commits. Before a PR, suggest `/ccs:review`. Then write the report (below).
 
 ## Writing
 
