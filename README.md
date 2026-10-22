@@ -7,9 +7,9 @@ A workflow for [Claude Code](https://code.claude.com/docs/en/skills.md), built f
 theory. Every run reports on itself, and the skills improve from those reports.
 
 ```
-spec ──► implement ◄── root-cause
-              │
-           explain          every run ──► .ccs/reports ──► learn ──► better skills
+spec ──► implement ──► review
+              ▲    │
+     root-cause    explain          every run ──► .ccs/reports ──► learn ──► better skills
 ```
 
 ![A real run: /ccs:root-cause finds the commit that turned "10% off" into "charge 10%", then /ccs:implement writes the failing tests, fixes one line and runs the suite green](assets/demo.gif)
@@ -23,6 +23,7 @@ spec ──► implement ◄── root-cause
 | `/ccs:spec <slug>` | Writes a design spec to `docs/specs/<slug>.md`, then stops for approval. Refuses trivial work. |
 | `/ccs:root-cause <symptom>` | Read-only. Checks every source in reach (repo, CLIs, MCPs such as Sentry, Datadog, PostHog), then finds the root cause with evidence. |
 | `/ccs:implement <what>` | Test-first for bugs and features: read the touched code → failing test → smallest code (reuse → stdlib → installed dep → minimum) → refactor for the next reader → suite green. Takes a spec or a root cause. Never commits. |
+| `/ccs:review [PR \| branch]` | Read-only. Parallel finders in fresh context, one verifier per finding; reports only verified bugs and rule violations. Repo rules in `REVIEW.md`. |
 | [`/ccs:explain`](skills/explain/SKILL.md) | Standalone HTML study guide for finished work, so you can defend it. Optional target and `lang: uk`. User-invoked only. |
 | `/ccs:learn` | Turns session corrections and friction repeated across reports into edits to these skills; commits on approval. User-invoked only. |
 
