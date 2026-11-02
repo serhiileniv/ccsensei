@@ -29,6 +29,23 @@ spec ──► implement ──► review
 
 All skills write KISS: one line where one line does.
 
+## Hackathon
+
+```
+brief ──► spec ──► implement ──► (freeze) demo ──► pitch ──► deck
+hour 0      build, replay first        last 25% of the time
+```
+
+| Skill | What it does |
+|---|---|
+| `/ccs:brief [brief]` | Hour 0. Your ideas, your Craft notes, then LLM extras; a simulated panel of the real judges scores them; you pick. Writes `hackathon/plan.md`: the sentence, rubric → proof, 90 s demo script, replay list, freeze time, cut order. |
+| `/ccs:demo` | At freeze. Scenario, replay and reset check, dry run, then a captioned video from the bundled Playwright recorder: 16:9, 9:16, gif, srt, 60 s backup. |
+| `/ccs:pitch [live 3m \| video 3m \| 5m]` | Audits what the repo proves (`facts.md`), then a timed spoken script, a judge Q&A bank, a rehearsal sheet and the submission text. A gate checks time, opening, wow ≤ 2:00 and every number. |
+| `/ccs:deck` | Builds the whole deck: 7–9 offline HTML slides, demo video at the centre, house design. Screenshots and checks every slide, exports PDF. |
+
+All four are user-invoked only: type the command; plain words won't trigger them.
+Checklist for what they don't cover: [hackathon](docs/guides/hackathon.md).
+
 ## Reports
 
 Every run writes one file to `.ccs/reports/<skill>/<date>-<slug>.md` at the repo root:
@@ -43,6 +60,8 @@ friction (or one report plus your correction), then marks those reports `learned
 | Guide | What it is |
 |---|---|
 | [design](docs/guides/design.md) | Conventions for Solt Wagner–style Framer marketing sites. Plain markdown, not a skill: point any AI at it before building. |
+| [deck-design](docs/guides/deck-design.md) | The house deck design used by `/ccs:deck`: tokens, type, slide layouts. |
+| [hackathon](docs/guides/hackathon.md) | Event checklist: hour 0, during, submission, live pitch. |
 
 ## Install
 
