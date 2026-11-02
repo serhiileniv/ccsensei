@@ -23,7 +23,7 @@ Director: `goto, click, type, hover, scroll, spotlight, fast(on), pause`, plus `
 | `RETRIES` | 2 | Retries per failed scene |
 | `HEADLESS` | 0 | 1 = headless (frames may drop to 1×) |
 | `MAX_S` | `meta.maxSeconds` or 120 | Length budget |
-| `REPLAY` | 0 | 1 = "Replay of a live run" chip on every frame |
+| `REPLAY` | 0 | 1 = "Replay of a live run" chip on every frame; saved at record, render reuses it unless set |
 | `PUBLIC_URL` | `meta.url` | URL on the end card |
 
 Render warns when the first `wow` scene starts after 0:15 or a caption is over 8 words.

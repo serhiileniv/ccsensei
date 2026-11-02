@@ -1,10 +1,10 @@
 // Turns frames/ into out/demo.mp4, demo-vertical.mp4, demo.gif, poster.png and demo.srt.
 // Speed ramps fit MAX_S, zoom is a crop in post (zoompan), captions and cards are HTML rendered to PNG.
-// Usage: node render.ts   env: MAX_S=120, PUBLIC_URL, REPLAY=1
+// Usage: node render.ts   env: MAX_S=120, PUBLIC_URL, REPLAY=0|1 (default: as recorded)
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { chromium } from "playwright";
-import { caption, endCard, replayChip, speedBadge, titleCard } from "./lib/cards.ts";
+import { caption, endCard, replayChip, replayOn, speedBadge, titleCard } from "./lib/cards.ts";
 import { captionCues, toSrt } from "./lib/captions.ts";
 import { FPS, ffmpeg, type Overlay, overlayChain, overlayInputs, probeDuration, writeConcat } from "./lib/ffmpeg.ts";
 import { lint } from "./lib/lint.ts";
@@ -24,11 +24,14 @@ const XFADE_S = 0.6;
 const LEAD_S = TITLE_S - XFADE_S;
 const GIF_S = 10;
 const POSTER_OFFSET_S = 1.5;
-const REPLAY = process.env.REPLAY === "1";
-
+if (!existsSync(join(FRAMES, "manifest.json"))) {
+  process.stderr.write("no frames/manifest.json: run `npm run record` first\n");
+  process.exit(1);
+}
 const manifest: Manifest = JSON.parse(readFileSync(join(FRAMES, "manifest.json"), "utf8"));
 const takes: Take[] = manifest.scenes.map((s) => JSON.parse(readFileSync(join(FRAMES, s.name, "take.json"), "utf8")));
 const maxS = Number(process.env.MAX_S ?? manifest.meta.maxSeconds ?? 120);
+const REPLAY = replayOn(process.env.REPLAY, manifest.replay);
 
 /** Renders HTML snippets to PNGs at `size`; returns their paths. */
 async function renderPngs(items: { name: string; html: string }[], size: Size): Promise<string[]> {
@@ -149,8 +152,4 @@ function encode(inputs: string[], filters: string[], out: string): void {
     "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-r", `${FPS}`, out]);
 }
 
-if (!existsSync(join(FRAMES, "manifest.json"))) {
-  process.stderr.write("no frames/manifest.json: run `npm run record` first\n");
-  process.exit(1);
-}
 await main();

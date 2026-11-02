@@ -48,7 +48,7 @@ Edit only the slide sections in `index.html`; reuse the layouts the template alr
 ## Step 3 — QA loop
 
 Once: `cd ${CLAUDE_SKILL_DIR}/qa && npm i && npx playwright install chromium`. Then:
-`node ${CLAUDE_SKILL_DIR}/qa/qa.ts hackathon/deck/index.html --out hackathon/deck/out --minutes <limit>`. It renders every slide,
+`node ${CLAUDE_SKILL_DIR}/qa/qa.ts hackathon/deck/index.html --out hackathon/deck/out --minutes <limit in minutes, a number>`. It renders every slide,
 fails on overflow, safe area, small text, word and bullet counts, fonts not loaded, broken or
 upscaled images, missing video, off-token colours and > 9 slides, exports the PDF and checks
 its page count, and prints talk time from the notes.

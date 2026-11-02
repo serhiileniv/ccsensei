@@ -67,8 +67,8 @@ Open `demo/out/poster.png` and frames around each caption. Check and print pass/
 - no dev badges, no secrets, no real customer data on screen
 
 Outputs: `demo.mp4` (16:9), `demo-vertical.mp4` (9:16), `demo.gif`, `poster.png`, `demo.srt`.
-Backup for the live pitch: `MAX_S=60 npm run render && mv out/demo.mp4 out/backup-60s.mp4`, then
-re-run `npm run render` for the full cut (render overwrites `out/`). Speed ramps only compress
+Backup for the live pitch: `MAX_S=60 npm run render && mv out/demo.mp4 backup-60s.mp4 && npm run render`.
+The backup goes outside `out/` because every render wipes `out/`; the replay chip follows the recording. Speed ramps only compress
 `fast()` waits; if the core flow can't fit 60 s, drop scenes from a copy of `scenario.ts` instead.
 Tell the user to keep the backup on the desktop and a USB stick.
 

@@ -23,4 +23,4 @@ export type Mark =
 export interface Take { name: string; viewport: Size; start: number; end: number; frames: Frame[]; marks: Mark[] }
 
 /** What record.ts hands to render.ts (scenario functions stripped). */
-export interface Manifest { meta: Meta; scenes: { name: string; caption?: string; wow?: boolean }[] }
+export interface Manifest { meta: Meta; replay?: boolean; scenes: { name: string; caption?: string; wow?: boolean }[] }

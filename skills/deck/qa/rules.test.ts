@@ -12,6 +12,7 @@ import {
   isUpscaled,
   outsideSafeArea,
   parseColor,
+  parseMinutes,
   parseTokens,
   pdfPageCount,
   talkMinutes,
@@ -171,4 +172,11 @@ test('customProp reads a :root custom property value', () => {
 test('checkSlide ignores ink overflow on non-clipping boxes (tight serif line-height)', () => {
   const ok = slide({ elements: [element({ label: 'h2', clips: false, scroll: { width: 400, height: 130 } })] });
   assert.deepEqual(checkSlide(ok, { tokens, fileExists: exists }), []);
+});
+
+test('parseMinutes takes a positive number only', () => {
+  assert.equal(parseMinutes('3'), 3);
+  assert.equal(parseMinutes('2.5'), 2.5);
+  assert.equal(parseMinutes('3m'), null);
+  assert.equal(parseMinutes('0'), null);
 });

@@ -42,3 +42,6 @@ function chip(text: string, corner: string): string {
 
 export const speedBadge = (speed: number): string => chip(`▶▶ ${speed}×`, "right:3vmin;top:3vmin");
 export const replayChip = (): string => chip("Replay of a live run", "left:3vmin;top:3vmin");
+/** REPLAY env wins when set; otherwise the flag record.ts saved, so every render of a replayed take keeps the chip. */
+export const replayOn = (env: string | undefined, recorded: boolean | undefined): boolean =>
+  env === undefined ? recorded === true : env === "1";

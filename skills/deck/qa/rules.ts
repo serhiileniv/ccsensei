@@ -111,6 +111,11 @@ export const outsideSafeArea = (box: Box, canvas: Size, margin: number): boolean
 export const isUpscaled = (img: { src: string; naturalWidth: number; renderedWidth: number }): boolean =>
   !/\.svg(\?|#|$)/i.test(img.src) && img.naturalWidth < img.renderedWidth;
 
+export const parseMinutes = (value: string): number | null => {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? n : null;
+};
+
 export const talkMinutes = (words: number, wpm: number): number => words / wpm;
 
 export const pdfPageCount = (pdf: string): number => (pdf.match(/\/Type\s*\/Page(?!s)\b/g) ?? []).length;

@@ -96,7 +96,7 @@ async function main(): Promise<void> {
       return;
     }
     for (const scene of scenes) await recordScene(page, scene);
-    const manifest: Manifest = { meta, scenes: scenes.map(({ name, caption, wow }) => ({ name, caption, wow })) };
+    const manifest: Manifest = { meta, replay: process.env.REPLAY === "1", scenes: scenes.map(({ name, caption, wow }) => ({ name, caption, wow })) };
     writeFileSync(join(FRAMES, "manifest.json"), JSON.stringify(manifest, null, 1));
     process.stdout.write(`recorded ${scenes.length} scenes → ${FRAMES}\n`);
   } finally {

@@ -8,7 +8,7 @@ import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
 import { collectSlide } from './collect.ts';
 import { contactSheet, exportPdf, fontLoaded, goToSlide, openDeck, PROJECTOR, screenshotAll, slideCount, slidePng } from './render.ts';
-import { LIMITS, checkDeck, checkSlide, countWords, customProp, firstFontFamily, parseTokens, pdfPageCount, talkMinutes } from './rules.ts';
+import { LIMITS, checkDeck, checkSlide, countWords, customProp, firstFontFamily, parseMinutes, parseTokens, pdfPageCount, talkMinutes } from './rules.ts';
 import type { Violation } from './rules.ts';
 
 const FONT_TOKENS = ['--font-display', '--font-ui'];
@@ -21,7 +21,11 @@ const { values, positionals } = parseArgs({
 const deckPath = resolve(positionals[0] ?? join(import.meta.dirname, '../template/index.html'));
 const deckDir = dirname(deckPath);
 const out = resolve(values.out);
-const minutes = Number(values.minutes);
+const minutes = parseMinutes(values.minutes);
+if (minutes === null) {
+  console.error(`--minutes must be a positive number, got "${values.minutes}"`);
+  process.exit(2);
+}
 if (!existsSync(deckPath)) {
   console.error(`Deck not found: ${deckPath}`);
   process.exit(2);
