@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product name</title>
+  <link rel="stylesheet" href="vendor/reveal/reset.css">
+  <link rel="stylesheet" href="vendor/reveal/reveal.css">
+  <link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<!-- Template: replace placeholder copy. Limits (checked by qa/qa.ts): ≤ 9 slides, ≤ 30 words and
+     ≤ 3 bullets per slide, text ≥ 24px, everything inside the 64px safe area except [data-bleed],
+     colors only from deck.css :root. Speaker notes come from hackathon/script.md. -->
+<div class="reveal">
+<div class="slides">
+
+  <section data-title="Title">
+    <div class="slide">
+      <p class="kicker">Hackathon name · 2026</p>
+      <h1 class="hero push">Product name.</h1>
+      <p class="lede">X for Y that Z, said in one line a judge can repeat.</p>
+    </div>
+    <aside class="notes">Product name is X for Y. It does Z. Say what it is in the first sentence; no team intro.</aside>
+  </section>
+
+  <section data-title="Problem">
+    <div class="slide">
+      <p class="kicker">01 · The problem</p>
+      <h2 class="h2 push">Every Monday, Maria loses <span class="accent">an hour</span> to one spreadsheet.</h2>
+      <p class="body">Maria, store manager. One user, one moment, one number.</p>
+    </div>
+    <aside class="notes">Tell one user's moment. One number from facts.md. Fifteen to twenty seconds, then move on.</aside>
+  </section>
+
+  <section data-title="Idea">
+    <div class="slide">
+      <p class="kicker">02 · The idea</p>
+      <h2 class="h2">The tool does the hour, <span class="accent">Maria checks it.</span></h2>
+      <div class="cells push">
+        <div class="cell"><p class="label">Before</p><p class="value">60 min by hand</p></div>
+        <div class="cell"><p class="label">After</p><p class="value">2 min to review</p></div>
+      </div>
+    </div>
+    <aside class="notes">The idea in one breath: what changes for Maria. Do not repeat the slide; add the why.</aside>
+  </section>
+
+  <section data-title="Product">
+    <div class="slide">
+      <p class="kicker">03 · The product</p>
+      <div class="split">
+        <div>
+          <h2 class="h2">One screen.</h2>
+          <ol class="callouts">
+            <li>Reads the data</li>
+            <li>Proposes the order</li>
+            <li>Shows why</li>
+          </ol>
+        </div>
+        <div class="stage">
+          <div class="glow" data-bleed></div>
+          <div class="device"><img src="img/screenshot.svg" alt="Product screenshot"></div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">Point at the three callouts in order. Crop the screenshot to the part that matters.</aside>
+  </section>
+
+  <section data-title="Demo">
+    <div class="slide slide--bleed">
+      <video class="bleed-video" data-bleed data-autoplay playsinline preload="auto" poster="img/poster.svg">
+        <source src="media/demo.webm" type="video/webm">
+        <p class="fallback">Video unavailable. Open the live app.</p>
+      </video>
+    </div>
+    <aside class="notes">Let the video run; wow by 0:15. If it fails, switch to the live app tab, already open on the first scene.</aside>
+  </section>
+
+  <section data-title="Proof 1">
+    <div class="slide">
+      <p class="kicker">04 · Proof</p>
+      <div class="proof">
+        <p class="number">×38</p>
+        <p class="lede">more customers checked per hour than by hand.</p>
+      </div>
+    </div>
+    <aside class="notes">One number, from facts.md, with the command that proves it ready for Q and A.</aside>
+  </section>
+
+  <section data-title="Proof 2">
+    <div class="slide">
+      <p class="kicker">05 · Proof</p>
+      <div class="proof">
+        <p class="number">4.2 s</p>
+        <p class="lede">from upload to a checked answer, on real data.</p>
+      </div>
+    </div>
+    <aside class="notes">Second proof, a different kind: speed, accuracy or money. Name it as measured, not estimated.</aside>
+  </section>
+
+  <section data-title="How it's built">
+    <div class="slide">
+      <p class="kicker">06 · How it's built</p>
+      <h2 class="h2">LLM proposes, code verifies.</h2>
+      <div class="flow">
+        <div class="node"><p class="label">In</p><p class="node-title">Your data</p></div>
+        <span class="arrow">→</span>
+        <div class="node"><p class="label">LLM</p><p class="node-title">Proposes</p></div>
+        <span class="arrow">→</span>
+        <div class="node node--key"><p class="label">Code</p><p class="node-title">Verifies</p></div>
+        <span class="arrow">→</span>
+        <div class="node"><p class="label">Out</p><p class="node-title">Checked answer</p></div>
+      </div>
+    </div>
+    <aside class="notes">One line on why to trust it. Not the stack. Name one weakness before they ask.</aside>
+  </section>
+
+  <section data-title="Closing">
+    <div class="slide">
+      <p class="kicker">Product name</p>
+      <div class="closing">
+        <h2 class="h2">X for Y that Z.</h2>
+        <div class="qr">
+          <img src="img/qr.svg" alt="QR code to the live app">
+          <p class="url">app.example.com</p>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">Say the sentence. Stop. Leave this slide up for questions.</aside>
+  </section>
+
+</div>
+</div>
+<script src="vendor/reveal/reveal.js"></script>
+<script src="vendor/reveal/plugin/notes.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1920,
+    height: 1080,
+    margin: 0,
+    center: false,
+    controls: false,
+    progress: false,
+    hash: true,
+    transition: 'fade',
+    pdfSeparateFragments: false,
+    plugins: [RevealNotes],
+  });
+</script>
+</body>
+</html>

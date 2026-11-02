@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <!-- Placeholder: replace with the demo video's first frame (poster.png from /ccs:demo). -->
+  <rect width="1920" height="1080" fill="#0b1b66"/>
+  <circle cx="960" cy="540" r="96" fill="none" stroke="#f4f4f6" stroke-width="6"/>
+  <polygon points="935,490 935,590 1015,540" fill="#f4f4f6"/>
+</svg>

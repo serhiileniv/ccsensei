@@ -1,0 +1,16 @@
+{
+  "name": "demo-recorder",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "check": "node record.ts --check",
+    "record": "node record.ts",
+    "render": "node render.ts",
+    "demo": "node record.ts --check && node record.ts && node render.ts",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "playwright": "1.64.1"
+  }
+}
