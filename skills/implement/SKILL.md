@@ -8,13 +8,21 @@ argument-hint: "<bug | behaviour | docs/specs/<slug>.md>"
 
 Code is done when a test that used to fail now passes, and the suite is green.
 
+## Preflight
+
+`git fetch`, then print one line: `repo <owner/name> · branch <b> · base <origin/x @ sha> · clean|dirty`.
+Stop and ask only if: the request names another repo or path · you are on the default branch ·
+the local base is behind `origin/<base>`.
+
 ## Step 0 — route
 
 - Non-trivial and no spec → `/ccs:spec` first.
 - A bug whose cause is not established → `/ccs:root-cause` first, then take its root
   cause and evidence rather than re-deriving them. Fixing an untraced symptom produces a
   second bug behind the first.
-- No test runner in the repo → stop and say so. Choosing one is a spec.
+- No test runner in the repo → use the language's built-in one (`node --test`,
+  `python -m unittest`, `go test`, `cargo test`, `swift test`) and say so in one line. Stop
+  only if the language has none, or the repo has tests no runner covers.
 
 ## Step 1 — test list
 
@@ -73,8 +81,11 @@ A design change mid-way → stop. Update the spec, or run `/ccs:spec` if there i
 
 - the full suite passes — run it, do not assume
 - the repo's typecheck and lint gates pass, if it has them
+- every `manual` item, first rung that holds:
+  1. run it — the `run` skill, Playwright, a CLI call, a rendered screenshot → `verified: <how>`
+  2. can't (OS permission, hardware, voice, real GPU) → checklist line `do <action> → expect <result>`
 
-Report each list item → test name or `manual`, then the actual suite output. For a bug,
+Report each list item → test name, `verified` or a checklist line, then the actual suite output. For a bug,
 add the root cause in one line. What you skipped, one line each: `skipped: X, add when Y`.
 
 Do not commit. The user commits. Before a PR, suggest `/ccs:review`. Then write the report (below).
@@ -86,7 +97,8 @@ narrating what was tried, no paragraph restating the line above.
 Two things always stay: **why** a non-obvious decision was made, and **what a check cannot do**.
 Caveats and risks still get said, one line each.
 
-Outcome: success = every list item green or `manual`, suite green · partial = items left · failed = suite red, or stopped.
+Outcome: success = every list item green, verified or on the checklist, suite green · partial = items left · failed = suite red, or stopped.
+The report's `Found:` line ends with `Manual: <n>`, the checklist count, so `learn` still sees what only a human can check.
 
 ## Report
 

@@ -35,6 +35,18 @@ Collect paths, not contents:
 Run every command under `REVIEW.md` `## Checks`, each with `; echo "rc=$?"` appended so the
 exit code is seen. Non-zero exit or non-empty output = a failed check, reported as fact, no verifier. Finders get the list and skip those subjects.
 
+No `## Checks` → infer them, and run what exists:
+
+| Source | Commands |
+|---|---|
+| `package.json` scripts | `test`, `lint`, `typecheck` |
+| `pyproject.toml` | `ruff check`, `pytest`, if installed |
+| `Makefile` | `test`, `lint` targets |
+| `Cargo.toml` / `go.mod` / `Package.swift` | `cargo test` / `go test ./...` / `swift test` |
+
+Say `Checks: inferred (no REVIEW.md)`, and end the output with a suggested `REVIEW.md` holding
+them. Print it; never write it.
+
 ## Step 3 — find
 
 Launch finders **in parallel**, as subagents with fresh context: they never saw the code
@@ -106,7 +118,7 @@ Review: <PR #n | branch> vs <base> · <files> files, +<a>/-<d>
 
 Verdict: fix first | ready for human review
 
-Checks: <n> run, <failed> failed
+Checks: <n> run, <failed> failed   (or: Checks: inferred (no REVIEW.md), <n> run, <failed> failed)
   ✗ <command> — <one line>
 
 🔴 file.py:42 — <problem>

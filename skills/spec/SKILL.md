@@ -8,6 +8,12 @@ argument-hint: "<slug or short description>"
 
 Non-trivial work starts with a spec, not code. This writes it, shows it, and stops.
 
+## Preflight
+
+`git fetch`, then print one line: `repo <owner/name> · branch <b> · base <origin/x @ sha> · clean|dirty`.
+Stop and ask only if: the request names another repo or path · the local base is behind
+`origin/<base>`.
+
 ## Step 0 — refuse trivial work
 
 A typo, a one-line bug, an obvious test does **not** get a spec. Say so in one line and
@@ -36,6 +42,9 @@ Create the directory if missing. Slug: lowercase, hyphens, no dates.
 ## Goal
 What this is for, in two or three sentences. Not a feature list.
 
+## How it's used
+Who triggers it, how (automatic | flag | command | UI), and what they see. One line each.
+
 ## Non-goals
 What this deliberately does not do, each with the reason it was excluded.
 
@@ -60,7 +69,8 @@ Before showing it, cut the draft to the **Writing** rules at the end of this fil
 
 ## Step 4 — gate
 
-Report the path. State the open questions as questions. Then **stop**.
+Report the path. Restate `How it's used` first: it's where designs get rejected after
+they're built. Then the open questions, as questions. Then **stop**.
 
 Do not write code until the user approves. "modify: …" means revise the spec and gate
 again.
