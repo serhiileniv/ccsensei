@@ -51,7 +51,7 @@ A reader must be able to build from this without asking what you meant.
 
 ## Open questions
 Numbered. Only what the spec genuinely cannot settle — not questions you could
-answer by reading the code.
+answer by reading the code. Each ends with `Default: <recommended answer>`.
 ```
 
 ## Step 3 — KISS the whole thing
@@ -60,10 +60,11 @@ Before showing it, cut the draft to the **Writing** rules at the end of this fil
 
 ## Step 4 — gate
 
-Report the path. State the open questions as questions. Then **stop**.
+Report the path. State the open questions as questions, each with its default. Then **stop**.
 
 Do not write code until the user approves. "modify: …" means revise the spec and gate
-again.
+again. Approval without answers accepts the defaults: write them into the spec as
+settled before implementing.
 
 ## After approval
 
