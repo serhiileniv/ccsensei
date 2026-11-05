@@ -1,5 +1,7 @@
 # Spec: `/ccs:review`: high-signal code and PR review
 
+Superseded by `review-recall.md` (v2, recall-first).
+
 ## Goal
 
 Review a branch or PR the way Anthropic's own reviewers do: parallel narrow finders in fresh

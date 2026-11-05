@@ -1,25 +1,31 @@
 ---
 name: review
-description: Read-only. Review a PR or branch for real bugs and rule violations: parallel finders in fresh context, one verifier per finding, only verified findings reported. Use before asking a human to review, or when asked to review a PR.
+description: Read-only. Review a PR or branch for bugs, regressions and rule violations, recall-first: maps every changed symbol and its callers, runs tests on head and base, parallel finders per lens with a per-hunk coverage check, one verifier per finding that tries to reproduce it. Use before asking a human to review, or when asked to review a PR.
 argument-hint: "[PR number | branch | empty = current branch]"
 ---
 
 # /ccs:review
 
-Report only what a verifier confirmed. A review people stop reading is worse than none.
+Miss nothing. Finders maximise recall, verifiers own precision, the human sees what neither
+could settle. A false positive costs a verifier run; a missed regression costs an incident.
 
 ## The hard rule
 
-**Read-only.** No edits, no commits, no push, no `gh pr comment` or review. Checks and
-tests that don't write are fine. The one write is this run's report.
+**Read-only.** No edits to the user's tree, no commits, no push, no `gh pr comment` or review.
+Tests, checks and repro scripts run only in scratch worktrees. The one write in the repo is
+this run's report.
 
 Never approve or block: a human does. Fixes go to `/ccs:implement`.
 
 ## Step 0 — scope
 
-- PR number → `gh pr view <n>` (title, body, base, draft) and `gh pr diff <n>`.
+- PR number → `gh pr view <n> --json title,body,baseRefName,headRefOid,isDraft,closingIssuesReferences,comments,reviews`,
+  `gh pr diff <n>`, and `gh issue view` for each linked issue.
 - Branch or empty → `git fetch`, then diff `origin/<base>...HEAD`.
 - Base = the `Base:` line in `REVIEW.md`, else the repo default branch.
+- Check out head and the merge base as scratch worktrees in the scratchpad:
+  `git worktree add --detach <scratch>/head <head-sha>` and `<scratch>/base <merge-base>`.
+  Never check out in the user's tree. Remove both at the end, whatever the outcome.
 - Empty diff → say so, stop. Draft → note it, continue.
 
 ## Step 1 — rules
@@ -30,49 +36,97 @@ Collect paths, not contents:
 - `REVIEW.md`, read with `git show origin/<base>:REVIEW.md`: a PR can't relax its own review.
   Missing on base, present in the tree → use the tree copy and say so.
 
-## Step 2 — checks
+## Step 2 — map
 
-Run every command under `REVIEW.md` `## Checks`, each with `; echo "rc=$?"` appended so the
-exit code is seen. Non-zero exit or non-empty output = a failed check, reported as fact, no verifier. Finders get the list and skip those subjects.
+One subagent builds the change map from the diff and the head worktree:
 
-No `## Checks` → infer them, and run what exists:
+- every hunk, numbered `H1…Hn`, with `file:lines`
+- every changed **symbol**: function, method, type, field, config key, CLI flag, route,
+  DB column, env var, exported constant, file format
+- per symbol, its contract change: signature, return, default, raises, side effect, ordering, removed
+- per symbol, every caller or user in head **outside the diff** (`grep`, LSP if available), as `file:line`
 
-| Source | Commands |
-|---|---|
-| `package.json` scripts | `test`, `lint`, `typecheck` |
-| `pyproject.toml` | `ruff check`, `pytest`, if installed |
-| `Makefile` | `test`, `lint` targets |
-| `Cargo.toml` / `go.mod` / `Package.swift` | `cargo test` / `go test ./...` / `swift test` |
+Why: regressions live in code the diff doesn't show.
+
+## Step 3 — checks and tests
+
+- Run every command under `REVIEW.md` `## Checks` in head, each with `; echo "rc=$?"` appended.
+  Non-zero exit or non-empty output = a failed check, reported as fact, no verifier.
+- Run `## Tests` in head. None listed → the table's Tests column; none found or env won't
+  install → `Tests: not run: <why>`.
+- Any test failing in head → run it in base. Head fail + base pass = 🔴 regression, as fact.
+  Fails in both = 🟣.
+
+No `## Checks` → the table's Checks column, in head, what exists:
+
+| Source | Checks | Tests |
+|---|---|---|
+| `package.json` scripts | `lint`, `typecheck` | `test` |
+| `pyproject.toml` | `ruff check`, if installed | `pytest`, if installed |
+| `Makefile` | `lint` target | `test` target |
+| `Cargo.toml` / `go.mod` / `Package.swift` | | `cargo test` / `go test ./...` / `swift test` |
 
 Say `Checks: inferred (no REVIEW.md)`, and end the output with a suggested `REVIEW.md` holding
 them. Print it; never write it.
 
-## Step 3 — find
+Finders get the failed checks and skip those subjects.
+
+## Step 4 — find
 
 Launch finders **in parallel**, as subagents with fresh context: they never saw the code
-being written. Each gets only: the diff, PR title and body, rule paths, the do-not-flag list.
+being written. Each gets: the diff, the change map, PR title, body and linked issues, rule
+paths, the do-not-flag list, its hunk group. Each **may read anything in the head worktree**.
 
 | Finder | Looks for |
 |---|---|
+| regression | Every caller and user in the map still works under the new contract. Removed or narrowed behaviour still needed somewhere. Changed defaults, ordering, error types, serialization, migrations, config, env, public API. |
+| logic | Wrong result for some input: boundaries, off-by-one, null / empty / zero, inverted condition, wrong variable, units, precedence, early return skipping work. |
+| errors-state | Swallowed or wrong exceptions, missing cleanup, leaks, partial writes, non-idempotent retries, races, un-awaited async, shared mutable state, stale cache. |
+| intent | Code doesn't do what the PR body, linked issue or spec says; a stated case not handled; unrelated behaviour changed. |
+| tests | Tests changed to pass, not to check: deleted or weakened assertions, new skips, snapshots regenerated over a behaviour change, mocks hiding the changed path. Missing test only for the PR's main claim. |
+| security | A hole provable from the changed code: injection, authz bypass, leaked secret, unsafe deserialization, path traversal. |
 | rules | A violation of a rule in the collected files. Must quote the exact rule and its path. |
-| bugs | From the diff alone: won't parse, compile or import; wrong for every input; a security hole provable from the changed lines. |
-| one per `## Lenses` item | That item, in the changed code only. |
+| one per `## Lenses` item | That item, in the changed code. |
+
+Diff over 400 changed lines → split hunks into groups of ≤ 400 lines; each finder runs once
+per group. Hunks under a `## Hot spots` path are never grouped: one run per hunk.
+
+Flag anything with a concrete trigger. Don't self-filter on certainty: the verifier decides.
 
 Each finding: `file:line`, problem, trigger (the input or path that hits it), fix.
 
-## Step 4 — verify
+## Step 5 — coverage
 
-One subagent per finding, in parallel. It reads the code around the finding and returns
-`confirmed` or `rejected` with evidence. A claim about behaviour needs a `file:line`
-citation, not an inference from a name. Rejected → dropped.
+Each finder also returns, for every hunk in its group, either finding ids or
+`clean: <one-line reason>`. `regression` also marks every mapped caller `checked`.
 
-## Step 5 — rank
+A hunk with no entry from a finder, or an unchecked caller → re-run that finder on just those,
+once. Still missing → list it under `Not covered` in the output.
+
+## Step 6 — verify
+
+One subagent per finding, in parallel, never shared. It tries to **reproduce** in the head
+worktree: a failing test or script (written under the scratchpad, not the repo), else a
+`file:line` trace from input to failure. A claim about behaviour needs a `file:line`
+citation, not an inference from a name. Returns one of:
+
+- `confirmed` — repro or trace
+- `rejected` — `file:line` evidence it can't happen
+- `unsure` — what it couldn't settle
+
+## Step 7 — rank
 
 Dedupe, then:
 
-- 🔴 Important: fix before merge
+- 🔴 Important: confirmed, fix before merge
+- 🟠 Human check: verifier `unsure`. Never dropped.
 - 🟡 Nit: worth fixing, not blocking. At most 5.
 - 🟣 Pre-existing: real, not introduced here; only when the diff touches that code
+
+## Cost guard
+
+Agents = 1 map + finders × groups + re-runs + verifiers. Estimate after Step 2; over 40 →
+print the estimate and ask before Step 4.
 
 ## Do not flag
 
@@ -81,13 +135,11 @@ Every finder and verifier gets this list:
 - a pre-existing issue as 🔴
 - style or taste
 - anything a linter, type checker or CI catches
-- "might fail" without a concrete input that makes it fail
+- "might fail" without a concrete input: the verifier must name one or return `rejected` / `unsure`
 - nits a senior engineer would skip
-- test coverage, unless a rule demands it
+- test coverage, beyond the `tests` finder
 - code silenced on purpose (`noqa`, lint-ignore)
 - anything under `REVIEW.md` `## Do not report`
-
-Not certain it is real → don't flag it.
 
 ## `REVIEW.md`
 
@@ -101,8 +153,14 @@ Base: develop
 ## Checks
 - `uv run ruff check src tests scripts`
 
+## Tests
+- `uv run pytest -q -m "not integration"`
+
 ## Lenses
 - Docs chain: a change under `src/engine/` has its card and History line
+
+## Hot spots
+- `src/engine/` — every hunk reviewed alone
 
 ## Do not report
 - Generated files, lockfiles
@@ -116,23 +174,30 @@ Base: develop
 ```
 Review: <PR #n | branch> vs <base> · <files> files, +<a>/-<d>
 
-Verdict: fix first | ready for human review
+Verdict: fix first | needs human check on 🟠 | ready for human review
 
 Checks: <n> run, <failed> failed   (or: Checks: inferred (no REVIEW.md), <n> run, <failed> failed)
   ✗ <command> — <one line>
+Tests: <command> — head <pass | n failed>, base <pass | n failed> | not run: <why>
+Coverage: <h> hunks × <f> finders, <c> callers checked · re-runs: <n>
 
 🔴 file.py:42 — <problem>
    Trigger: <input or path that hits it>
+   Repro: <test or script path | file:line trace>
    Fix: <one line>
+🟠 file.py:88 — <problem>
+   Why unsure: <what the verifier couldn't settle>
 🟡 …
 🟣 …
 
-Dropped by verifier: <n>
+Rejected: <n>
+  file.py:10 — <claim> — <reason, file:line>
+Not covered: <hunks or callers no finder reported on | none>
 Cannot check: <REVIEW.md ## Cannot check, verbatim, plus what this run could not see>
 ```
 
-No findings → `No issues found. Checked: <finders run>.`
-`fix first` when any check failed or any 🔴 exists.
+No findings → `No issues found. Checked: <finders run>, <h> hunks, <c> callers.`
+`fix first` when any check or test failed or any 🔴 exists; else `needs human check on 🟠` when any 🟠 exists.
 
 ## Writing
 
