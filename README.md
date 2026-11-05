@@ -23,7 +23,7 @@ spec ──► implement ──► review
 | `/ccs:spec <slug>` | Writes a design spec to `docs/specs/<slug>.md`, then stops for approval. Refuses trivial work. |
 | `/ccs:root-cause <symptom>` | Read-only. Checks every source in reach (repo, CLIs, MCPs such as Sentry, Datadog, PostHog), then finds the root cause with evidence. |
 | `/ccs:implement <what>` | Test-first for bugs and features: read the touched code → failing test → smallest code (reuse → stdlib → installed dep → minimum) → refactor for the next reader → suite green. Takes a spec or a root cause. Never commits. |
-| `/ccs:review [PR \| branch]` | Read-only. Parallel finders in fresh context, one verifier per finding; reports only verified bugs and rule violations. Repo rules in `REVIEW.md`. |
+| `/ccs:review [PR \| branch]` | Read-only, recall-first. Maps changed symbols and their callers, runs tests on head and base, parallel finders per lens with per-hunk coverage, one verifier per finding that tries to reproduce it; unsettled findings go to a human, never dropped. Repo rules in `REVIEW.md`. |
 | [`/ccs:explain`](skills/explain/SKILL.md) | Standalone HTML study guide for finished work, so you can defend it. Optional target and `lang: uk`. User-invoked only. |
 | `/ccs:learn` | Turns session corrections and friction repeated across reports into edits to these skills; commits on approval. User-invoked only. |
 
