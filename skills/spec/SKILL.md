@@ -10,7 +10,7 @@ Non-trivial work starts with a spec, not code. This writes it, shows it, and sto
 
 ## Preflight
 
-`git fetch`, then print one line: `repo <owner/name> · branch <b> · base <origin/x @ sha> · clean|dirty`.
+`git fetch` if `origin` exists, then print one line: `repo <owner/name> · branch <b> · base <origin/x @ sha | none> · clean|dirty`.
 Stop and ask only if: the request names another repo or path · the local base is behind
 `origin/<base>`.
 

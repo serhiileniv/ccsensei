@@ -10,9 +10,8 @@ Code is done when a test that used to fail now passes, and the suite is green.
 
 ## Preflight
 
-`git fetch`, then print one line: `repo <owner/name> · branch <b> · base <origin/x @ sha> · clean|dirty`.
-Stop and ask only if: the request names another repo or path · you are on the default branch ·
-the local base is behind `origin/<base>`.
+`git fetch` if `origin` exists, then print one line: `repo <owner/name> · branch <b> · base <origin/x @ sha | none> · clean|dirty`.
+Stop and ask only if: the request names another repo or path · the local base is behind `origin/<base>`.
 
 ## Step 0 — route
 

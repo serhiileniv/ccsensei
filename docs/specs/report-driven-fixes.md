@@ -54,14 +54,13 @@ Update the caveat line in `docs/specs/skill-reports.md` to point to this spec.
 
 ### 3. Preflight line in `spec` and `implement`
 
-A `## Preflight` section before step 0. First output line: `repo <owner/name> · branch <b> · base <origin/x @ sha> · <clean|dirty>`. Run `git fetch` first.
+A `## Preflight` section before step 0. First output line: `repo <owner/name> · branch <b> · base <origin/x @ sha | none> · <clean|dirty>`. Run `git fetch` first if `origin` exists: 12 of 19 report repos have none.
 Stop and ask only when one of these holds:
 
 - the request names a repo or path that isn't this one
-- `implement` is on the default branch
 - the local base is behind `origin/<base>`
 
-Otherwise continue. A confirmation on every run is noise.
+Otherwise continue. A confirmation on every run is noise. No stop on the default branch: 16 of 19 report repos sit on `main`, and `implement` never commits.
 
 ### 4. `spec`: "How it's used" section
 
