@@ -32,7 +32,7 @@ runs instead of one session's memory.
 
 Per repo, next to the work it describes. The first write adds `.ccs/` to `.git/info/exclude`
 if it isn't there yet. Outside a git repo: the current directory's `.ccs/reports/`.
-Caveat: a pattern spread across repos is only seen by running `learn` in each one.
+Superseded: `learn` now scans every repo; see [report-driven-fixes](report-driven-fixes.md).
 
 ### Report format
 

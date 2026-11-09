@@ -25,7 +25,7 @@ spec ──► implement ──► review
 | `/ccs:implement <what>` | Test-first for bugs and features: read the touched code → failing test → smallest code (reuse → stdlib → installed dep → minimum) → refactor for the next reader → suite green. Takes a spec or a root cause. Never commits. |
 | `/ccs:review [PR \| branch]` | Read-only. Parallel finders in fresh context, one verifier per finding; reports only verified bugs and rule violations. Repo rules in `REVIEW.md`. |
 | [`/ccs:explain`](skills/explain/SKILL.md) | Standalone HTML study guide for finished work, so you can defend it. Optional target and `lang: uk`. User-invoked only. |
-| `/ccs:learn` | Turns session corrections and friction repeated across reports into edits to these skills; commits on approval. User-invoked only. |
+| `/ccs:learn` | Turns session corrections and friction repeated across reports from every repo under `~/Projects` into edits to these skills; commits on approval. User-invoked only. |
 
 All skills write KISS: one line where one line does.
 
@@ -52,7 +52,7 @@ Every run writes one file to `.ccs/reports/<skill>/<date>-<slug>.md` at the repo
 outcome (`success | partial | failed`), what it used, what it found, what got in the way.
 `.ccs/` goes into `.git/info/exclude`, so reports never show up in a diff.
 
-`/ccs:learn` proposes a skill edit only when **two or more** reports share the same
+`/ccs:learn` reads reports from every repo under `~/Projects` (`CCS_SCAN_ROOT` to change it) and proposes a skill edit only when reports from **two or more** repos or dates share the same
 friction (or one report plus your correction), then marks those reports `learned: <sha>`.
 
 ## Guides

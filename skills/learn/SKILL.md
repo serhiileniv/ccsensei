@@ -17,8 +17,14 @@ A lesson is one of:
 - a user correction a ccs skill should have prevented
 - a step that was skipped or misread because its wording allowed it
 - a rule that proved wrong
-- a friction shared by **≥2** reports in `.ccs/reports/` with `learned: false`, or one
+- a friction shared by reports from **≥2 repos or ≥2 dates** with `learned: false`, or one
   report plus a user correction. One-off friction is not a lesson.
+
+Reports live in every repo. Read them all:
+
+```
+find "${CCS_SCAN_ROOT:-$HOME/Projects}" -maxdepth 6 -path '*/.ccs/reports/*' -name '*.md'
+```
 
 Project facts and one-off preferences are not lessons — the harness memory holds those.
 Never write memory files, and never edit `~/.claude/CLAUDE.md`.
@@ -38,7 +44,7 @@ Never edit `~/.claude/plugins/cache` — it is overwritten on update.
 ## Step 4 — edit
 
 - Tree dirty → stop and say so.
-- Branch `learn/<slug>` off `main`.
+- `git fetch`, then branch `learn/<slug>` off `origin/main`: local `main` can be stale.
 - Smallest change to that skill's `SKILL.md` or supporting file. Tighten an existing line
   before adding one.
 
@@ -52,7 +58,7 @@ the one in `skills/spec/SKILL.md`, make it match in the same diff.
 Show the diff, then one line per lesson: *what happened → what changed*. Stop.
 
 On approval, commit on the branch, then set `learned: <short sha>` on the reports that fed
-it. Never delete reports. Never push or open a PR.
+it, in whichever repo each lives (`.ccs/` is excluded, so no diff there). Never delete reports. Never push or open a PR.
 
 Nothing qualified → say so and change nothing. An empty run beats filler.
 
