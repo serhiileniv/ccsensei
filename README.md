@@ -9,7 +9,7 @@ theory. Every run reports on itself, and the skills improve from those reports.
 ```
 spec ──► implement ──► review
               ▲    │
-     root-cause    explain          every run ──► .ccs/reports ──► learn ──► better skills
+     root-cause                     every run ──► .ccs/reports ──► learn ──► better skills
 ```
 
 ![A real run: /ccs:root-cause finds the commit that turned "10% off" into "charge 10%", then /ccs:implement writes the failing tests, fixes one line and runs the suite green](assets/demo.gif)
@@ -25,7 +25,6 @@ spec ──► implement ──► review
 | `/ccs:implement <what>` | Test-first for bugs and features: read the touched code → failing test → smallest code (reuse → stdlib → installed dep → minimum) → refactor for the next reader → suite green. Takes a spec or a root cause. Never commits. |
 | `/ccs:review [PR \| branch]` | Read-only. Parallel finders in fresh context, one verifier per finding; reports only verified bugs and rule violations. Repo rules in `REVIEW.md`. |
 | `/ccs:babysit [PR]` | Your PR queue in this repo: reviews to give, threads to answer. Judges each comment, drafts and self-checks every reply and fix, acts only on your yes. User-invoked only. |
-| [`/ccs:explain`](skills/explain/SKILL.md) | Standalone HTML study guide for finished work, so you can defend it. Optional target and `lang: uk`. User-invoked only. |
 | `/ccs:learn` | Turns session corrections and friction repeated across reports from every repo under `~/Projects` into edits to these skills; commits on approval. User-invoked only. |
 
 All skills write KISS: one line where one line does.
@@ -77,10 +76,10 @@ Restart Claude Code.
 <summary>Or copy a single skill by hand</summary>
 
 ```bash
-cp -r skills/explain ~/.claude/skills/explain
+cp -r skills/root-cause ~/.claude/skills/root-cause
 ```
 
-Or into one project: `<repo>/.claude/skills/explain`. Restart, then type `/explain`.
+Or into one project: `<repo>/.claude/skills/root-cause`. Restart, then type `/root-cause`.
 
 </details>
 
@@ -90,10 +89,10 @@ A skill is a directory with a `SKILL.md` entry point (YAML frontmatter + instruc
 optional files loaded on demand:
 
 ```
-skills/explain/
+skills/deck/
 ├── SKILL.md        # frontmatter + the steps the agent follows
-├── STYLE.md        # the study-guide style contract
-└── example.html    # a finished guide; its <head>, CSS, nav and script are the template
+├── template/       # the slide template, fonts and images
+└── qa/             # scripts that screenshot and check every slide
 ```
 
 Design records live in [`docs/specs/`](docs/specs/).
