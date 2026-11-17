@@ -24,6 +24,7 @@ spec ──► implement ──► review
 | `/ccs:root-cause <symptom>` | Read-only. Checks every source in reach (repo, CLIs, MCPs such as Sentry, Datadog, PostHog), then finds the root cause with evidence. |
 | `/ccs:implement <what>` | Test-first for bugs and features: read the touched code → failing test → smallest code (reuse → stdlib → installed dep → minimum) → refactor for the next reader → suite green. Takes a spec or a root cause. Never commits. |
 | `/ccs:review [PR \| branch]` | Read-only. Parallel finders in fresh context, one verifier per finding; reports only verified bugs and rule violations. Repo rules in `REVIEW.md`. |
+| `/ccs:babysit [PR]` | Your PR queue in this repo: reviews to give, threads to answer. Judges each comment, drafts and self-checks every reply and fix, acts only on your yes. User-invoked only. |
 | [`/ccs:explain`](skills/explain/SKILL.md) | Standalone HTML study guide for finished work, so you can defend it. Optional target and `lang: uk`. User-invoked only. |
 | `/ccs:learn` | Turns session corrections and friction repeated across reports from every repo under `~/Projects` into edits to these skills; commits on approval. User-invoked only. |
 
