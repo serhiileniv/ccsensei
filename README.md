@@ -91,8 +91,6 @@ skills/deck/
 └── qa/             # renders every slide and checks it
 ```
 
-Design records live in [`docs/specs/`](docs/specs/).
-
 ## Portability
 
 `argument-hint` and `disable-model-invocation` are Claude Code extensions, not part
