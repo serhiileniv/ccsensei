@@ -29,5 +29,3 @@ This is what the skills don't do for you.
 - [ ] Phone hotspot ready; replay mode one env flag away.
 - [ ] One run-through on the venue screen or projector.
 
-## After
-- [ ] Run `/ccs:learn` on this event's reports.

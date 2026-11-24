@@ -11,7 +11,7 @@
     {
       "name": "ccs",
       "source": "./",
-      "description": "Claude Code Sensei: spec-first, test-first, root-cause debugging. Every run reports; the skills learn from the reports.",
+      "description": "Claude Code Sensei: spec-first, test-first, root-cause debugging. Every run reports on itself.",
       "author": {
         "name": "Serhii Leniv"
       },

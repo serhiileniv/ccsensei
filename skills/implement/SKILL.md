@@ -97,7 +97,7 @@ Two things always stay: **why** a non-obvious decision was made, and **what a ch
 Caveats and risks still get said, one line each.
 
 Outcome: success = every list item green, verified or on the checklist, suite green · partial = items left · failed = suite red, or stopped.
-The report's `Found:` line ends with `Manual: <n>`, the checklist count, so `learn` still sees what only a human can check.
+The report's `Found:` line ends with `Manual: <n>`, the checklist count, so the report still shows what only a human can check.
 
 ## Report
 
